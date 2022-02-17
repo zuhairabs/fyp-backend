@@ -1,0 +1,6 @@
+{"level":"error","timestamp":"2020-07-04T14:51:57.414Z"}
+{"level":"error","timestamp":"2020-07-04T14:52:05.409Z"}
+{"level":"error","timestamp":"2020-07-04T14:53:12.666Z"}
+{"level":"error","timestamp":"2020-07-04T14:54:03.942Z"}
+{"level":"error","timestamp":"2020-07-04T14:55:07.103Z"}
+{"errors":{"bookingId":{"stringValue":"\"KPLH1C3\"","kind":"Number","value":"KPLH1C3","path":"bookingId","reason":{"generatedMessage":true,"code":"ERR_ASSERTION","actual":false,"expected":true,"operator":"=="},"message":"Cast to Number failed for value \"KPLH1C3\" at path \"bookingId\"","name":"CastError"}},"_message":"Archivebooking validation failed","message":"Archivebooking validation failed: bookingId: Cast to Number failed for value \"KPLH1C3\" at path \"bookingId\"","name":"ValidationError","level":"error","timestamp":"2020-08-11T17:08:10.339Z"}
