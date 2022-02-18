@@ -1,3 +1,5 @@
+/* eslint-disable no-tabs */
+/* eslint-disable quotes */
 const router = require('express').Router();
 const RTCUser = require('../../../models/entities/rtc-user-schema');
 const Store = require('../../../models/entities/store-schema');
@@ -69,22 +71,23 @@ router.post('/dial', async (req, res) => {
     if (!store) return res.status(404).json({ error: 'Store not found' });
     const savedUser = await User.findOne(user);
     if (savedUser) {
+      console.log({ savedUser, callNotificationTitle });
       const data = {
         type: 'call',
-        channelName,
-        display_name: store.business.display_name,
+        channelName: JSON.stringify(channelName),
+        display_name: JSON.stringify(store.business.display_name),
       };
       dispatchSingleNotification(
         savedUser.firebaseToken,
         callNotificationTitle,
         `📞 ${store.business.display_name} is calling`,
-        data
+        { data: JSON.stringify(data) }
       );
       dispatchSingleNotificationApple(
         savedUser.deviceToken,
         callNotificationTitle,
         `📞 ${store.business.display_name} is calling`,
-        data
+        { data: JSON.stringify(data) }
       );
       return res.status(200).json({ response: 'Call connected' });
     }
@@ -114,7 +117,7 @@ router.post('/missedCall', async (req, res) => {
         data
       );
       dispatchSingleNotificationApple(
-        savedUser.deviceToken,
+        savedUser.firebaseToken,
         missCallTitle,
         `You missed a Video call 📞`,
         data
