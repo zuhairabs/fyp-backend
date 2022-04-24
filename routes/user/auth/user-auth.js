@@ -4,7 +4,9 @@ const User = require('../../../models/entities/user-schema');
 const Notification = require('../../../models/operations/notification-schema');
 const authentication = require('../../../controllers/authentication');
 const handleError = require('../../../error_handling/handler');
-const { dispatchSingleNotification } = require('../../../utils/notification-dispatcher');
+const {
+  dispatchSingleNotification,
+} = require('../../../utils/notification-dispatcher');
 const saveNewNotification = require('../../../utils/notification-constructor');
 const verification = require('./verification');
 const { customAlphabet } = require('nanoid');
@@ -46,7 +48,11 @@ router.post('/login', async (req, res) => {
 
     const user = await User.findOneAndUpdate(
       { phone: cred.phone },
-      { _signingKey: generatedKey.key, firebaseToken: cred.firebaseToken, deviceToken: ((cred.deviceToken) ? (cred.deviceToken) : null) }
+      {
+        _signingKey: generatedKey.key,
+        firebaseToken: cred.firebaseToken,
+        deviceToken: cred.deviceToken ? cred.deviceToken : null,
+      }
     )
       .populate({
         path: 'notifications',
@@ -168,30 +174,21 @@ router.post('/signup', async (req, res) => {
     console.log(userWithNotifications);
 
     const userName = `${savedUser.firstName}`;
-    const code = `${savedUser.referral}`
+    const code = `${savedUser.referral}`;
     const title = 'Referral Code!';
     const body = `Dear ${userName}, your referral code from ShopOut is: ${code}`;
 
     dispatchSingleNotification(savedUser.firebaseToken, title, body, {
       referral: savedUser.referral,
-      archived: 'false'
+      archived: 'false',
     });
 
-    saveNewNotification(
-      title,
-      body,
-      null,
-      savedUser._id,
-      null,
-      null,
-      false);
+    saveNewNotification(title, body, null, savedUser._id, null, null, false);
 
     return res.status(200).json({
       token: generatedKey.token,
       user: userWithNotifications,
     });
-
-
   } catch (error) {
     handleError(error);
     return res.status(500).json({ error: 'Internal server error.' });
